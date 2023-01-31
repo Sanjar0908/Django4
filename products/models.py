@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -18,6 +19,7 @@ class Product(models.Model):
 
 
 class Comment(models.Model):
+    author = models.ForeignKey(User,on_delete=models.CASCADE, null=True)
     text = models.TextField()
     created_date = models.DateField(auto_now_add =True)
     post = models.ForeignKey(Product, on_delete=models.CASCADE, null = True)
