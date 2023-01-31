@@ -10,16 +10,17 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    image = models.ImageField(null=True,blank=True)
-    title = models.CharField(max_length = 50)
-    extra_inf = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    image = models.ImageField(null=True, blank=True)
+    title = models.CharField(max_length=50)
+    description = models.TextField()
     price = models.IntegerField()
-    rate = models.FloatField(default=5)
-    post_date = models.DateTimeField(auto_now_add =True)
+    # rate = models.FloatField()
+    post_date = models.DateTimeField(auto_now_add=True)
 
 
 class Comment(models.Model):
-    author = models.ForeignKey(User,on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     text = models.TextField()
     created_date = models.DateField(auto_now_add =True)
     post = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, related_name='Comments')

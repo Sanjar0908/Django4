@@ -1,9 +1,9 @@
 {% extends 'layouts/index.html' %}
 
 {% block content %}
-    <div class="product">
+    <div class="products">
         <style type="text/css">
-            .product {
+            .products {
                 width: 80%;
                 margin-left: 10%;
             }
@@ -25,9 +25,9 @@
             }
         </style>
         <img class="product_image" src="/media/{{ products.image }}/" alt="">
+        <h5>{{ products.author.username }}</h5>
         <h1>{{ products.title }}</h1>
-        <h2>{{ products.price }}</h2>
-        <h2>Price:{{ products.price }}</h2>
+        <h2>{{ products.rate }}</h2>
         <h2>{{ products.description }}</h2>
         <div class="date">
             <h4>{{ products.creadted_date }}</h4>

@@ -58,6 +58,7 @@ def crate_prducts_view(request):
             'form': ProductCreateForm
         }
         return render(request, 'products/create.html', context=context)
+
     if request.method == 'POST':
         form = ProductCreateForm(data=request.POST)
 
@@ -66,5 +67,11 @@ def crate_prducts_view(request):
                 author_id=request.user.id,
                 title=form.cleaned_data.get('title'),
                 description=form.cleaned_data.get('description'),
-                rate=form.cleaned_data
+                # rate=form.cleaned_data['rate'] if form.cleaned_data['rate'] is not None else 5,
+                price=form.cleaned_data['price']
             )
+            return redirect('/products')
+
+        return render(request, 'products/create.html', context={
+            'form': form
+        })
