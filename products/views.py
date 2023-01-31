@@ -36,6 +36,7 @@ def detail_view(request, **kwargs):
         form = ReviewCreateForm(data=request.POST)
         if form.is_valid():
             Comment.objects.create(
+                author_id=request.user.id,
                 text=form.cleaned_data.get('text'),
                 post_id=kwargs['id']
             )
@@ -62,6 +63,7 @@ def crate_prducts_view(request):
 
         if form.is_valid():
             Product.objects.create(
+                author_id=request.user.id,
                 title=form.cleaned_data.get('title'),
                 description=form.cleaned_data.get('description'),
                 rate=form.cleaned_data
