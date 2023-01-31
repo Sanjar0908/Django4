@@ -15,7 +15,7 @@ class Product(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField()
     price = models.IntegerField()
-    # rate = models.FloatField()
+    rate = models.FloatField(null=True)
     post_date = models.DateTimeField(auto_now_add=True)
 
 
