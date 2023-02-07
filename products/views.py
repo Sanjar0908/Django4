@@ -4,6 +4,8 @@ from Stor.forms import ProductCreateForm, ReviewCreateForm
 
 
 # Create your views here.
+PAGIMATION_LIMIT = 3
+
 
 def main(request):
     if request.method == 'GET':
@@ -11,11 +13,24 @@ def main(request):
 
 
 def product_view(request):
+    products = Product.objects.all()
+    max_page = products.__len__() / PAGIMATION_LIMIT
     if request.method == 'GET':
         products = Product.objects.all()
+        search = request.GET.get('search')
+        page = int(request.GET.get('page', 1))
+        if search is not None:
+            products = Product.objects.filter(title__icontains=search)
+        if round(max_page) < max_page:
+            max_page = round(max_page) + 1
+        else:
+            max_page = round(max_page)
+        products = products[PAGIMATION_LIMIT * (page - 1): PAGIMATION_LIMIT * page]
+
 
         context = {
-            'products': products
+            'products': products,
+            'max_page': range(1, max_page+1)
         }
         return render(request, 'products/products.html', context=context)
 
@@ -67,7 +82,7 @@ def crate_prducts_view(request):
                 author_id=request.user.id,
                 title=form.cleaned_data.get('title'),
                 description=form.cleaned_data.get('description'),
-                # rate=form.cleaned_data['rate'] if form.cleaned_data['rate'] is not None else 5,
+                # rate=form.clea ned_data['rate'] if form.cleaned_data['rate'] is not None else 5,
                 price=form.cleaned_data['price']
             )
             return redirect('/products')

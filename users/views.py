@@ -1,16 +1,21 @@
 from django.shortcuts import render, redirect
 from users.forms import LoginForm, RegisterForm
-from django.contrib.auth import authenticate, logout, login
+from products.models import Product
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
 
-def auth_view(request):
-    if request.method == 'GET':
-        return render(request, 'users/login.html', context={'form': LoginForm})
+# Create your views here.
 
-    elif request.method == 'POST':
+
+def login_view(request):
+    if request.method == 'GET':
+        context = {
+            'form': LoginForm(),
+        }
+        return render(request, 'users/login.html', context=context)
+    if request.method == 'POST':
         form = LoginForm(data=request.POST)
-        """ authenticate user """
 
         if form.is_valid():
             user = authenticate(
@@ -21,10 +26,10 @@ def auth_view(request):
                 login(request, user)
                 return redirect('/products/')
             else:
-                form.add_error('username', 'chuvak dagy bir jolu poprobuy')
+                form.add_error('username', 'чувак попробуй дагы бир жолу')
 
         return render(request, 'users/login.html', context={
-            'form': form
+            'form': form,
         })
 
 
@@ -36,7 +41,7 @@ def logout_view(request):
 def register_view(request):
     if request.method == 'GET':
         context = {
-            'form': RegisterForm
+            'form': RegisterForm,
         }
         return render(request, 'users/register.html', context=context)
 
@@ -50,12 +55,21 @@ def register_view(request):
                     username=form.cleaned_data.get('username'),
                     password=form.cleaned_data.get('password1')
                 )
-                return redirect('/users/login/')
+                return redirect('/products/')
             else:
-                form.add_error('password1', 'ошибка!')
+                form.add_error('password1', 'ошибка')
 
         return render(request, 'users/register.html', context={
-            'form': form
+            'form': form,
         })
+def products_views(request):
+    if request.method == 'GET':
+        products = Product.objects.all()
 
-
+        search = request.GET.get('search')
+        if search is not None:
+            products =Product.objects.filter(name__icontains=search)
+            context = {
+                'products': products
+            }
+            return render(request, 'products/products.html', context=context)
